@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'global/js/htmx.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
+    {% block head %}{% endblock head %}
+    <title>{% block title %}Documento{% endblock title %}</title>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% block body %}{% endblock body %}
+</body>
+</html>

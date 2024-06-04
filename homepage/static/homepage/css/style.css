@@ -1,0 +1,11 @@
+main {
+    display: grid;
+    height: fit-content;
+    
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 15vh);
+
+    .calendar-tile {
+        border: 1px solid black;
+    }
+}

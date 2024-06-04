@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <style>
+        header {
+            padding: 10px;
+        }
+    </style>
+    {% block forehead %}{% endblock forehead %}
+{% endblock head %}
+
+{% block title %}{% endblock title %}
+
+{% block body %}
+    <header>
+        <h1>Calendário</h1>
+    </header>
+    <hr>
+    {% block content %}{% endblock content %}
+{% endblock body %}
