@@ -10,47 +10,10 @@
 
 {% block content %}
     <main>
-        <div class="calendar-tile">1</div>
-        <div class="calendar-tile">2</div>
-        <div class="calendar-tile">3</div>
-        <div class="calendar-tile">4</div>
-        <div class="calendar-tile">5</div>
-        <div class="calendar-tile">6</div>
-        <div class="calendar-tile">7</div>
-        <div class="calendar-tile">8</div>
-        <div class="calendar-tile">9</div>
-        <div class="calendar-tile">10</div>
-        <div class="calendar-tile">11</div>
-        <div class="calendar-tile">12</div>
-        <div class="calendar-tile">13</div>
-        <div class="calendar-tile">14</div>
-        <div class="calendar-tile">15</div>
-        <div class="calendar-tile">16</div>
-        <div class="calendar-tile">17</div>
-        <div class="calendar-tile">18</div>
-        <div class="calendar-tile">19</div>
-        <div class="calendar-tile">20</div>
-        <div class="calendar-tile">21</div>
-        <div class="calendar-tile">22</div>
-        <div class="calendar-tile">23</div>
-        <div class="calendar-tile">24</div>
-        <div class="calendar-tile">25</div>
-        <div class="calendar-tile">26</div>
-        <div class="calendar-tile">27</div>
-        <div class="calendar-tile">28</div>
-        <div class="calendar-tile">29</div>
-        <div class="calendar-tile">30</div>
-        <div class="calendar-tile">31</div>
-        <div class="calendar-tile">32</div>
-        <div class="calendar-tile">33</div>
-        <div class="calendar-tile">34</div>
-        <div class="calendar-tile">35</div>
-        <div class="calendar-tile">36</div>
-        <div class="calendar-tile">37</div>
-        <div class="calendar-tile">38</div>
-        <div class="calendar-tile">39</div>
-        <div class="calendar-tile">40</div>
-        <div class="calendar-tile">41</div>
-        <div class="calendar-tile">42</div>
+        {% for date in date_list %}
+            <div class="calendar-tile">
+                {{ date.day }}
+            </div>
+        {% endfor %}
     </main>
 {% endblock content %}
