@@ -1,19 +1,49 @@
-{% extends "homepage/header.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
-{% block forehead %}
+{% block head %}
     <link rel="stylesheet" href="{% static "homepage/css/style.css" %}">
-{% endblock forehead %}
+{% endblock head %}
 
 {% block title %}Documento{% endblock title %}
 
-{% block content %}
+{% block body %}
+    <header>
+        <h1>Calendário</h1>
+        <div>
+            {% if date.month == 1 %}
+            <button>
+                <a href={% url "homepage:month_page" month=previous.month year=previous.year %} >
+                    &lt;
+                </a>
+            </button>
+            {% else %}
+                <button>
+                    <a href={% url "homepage:month_page" month=previous.month year=date_list.0.year %} >
+                        &lt;
+                    </a>
+                </button>
+            {% endif %}
+            <button>
+                <a href={% url "homepage:month_page" month=next.month year=date_list.41.year %}>
+                    &gt;
+                </a>
+            </button>
+        </div>
+    </header>
+    <hr>
     <main>
         {% for date in date_list %}
-            <div class="calendar-tile">
-                {{ date.day }}
-            </div>
+            {% if date.day == today.day and date.month == today.month and date.year == today.year %}
+                <div class="calendar-tile">
+                    <span id="today" >{{ date.day }}</span>
+                </div>
+            {% else %}
+                <div class="calendar-tile">
+                    <span>{{ date.day }}</span>
+                </div>
+            {% endif %}
         {% endfor %}
     </main>
-{% endblock content %}
+{% endblock body %}

@@ -1,3 +1,13 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+
+    button {
+        padding: 5px;
+    }
+}
+
 main {
     display: grid;
     height: fit-content;
@@ -7,5 +17,19 @@ main {
 
     .calendar-tile {
         border: 1px solid black;
+
+        span {
+            display: inline-block;
+            margin: 5px;
+        }
+    }
+
+    #today {
+        /* margin: -5px; */
+
+        border: 10px solid blue;
+        border-radius: 100%;
+
+        background-color: blue;
     }
 }
