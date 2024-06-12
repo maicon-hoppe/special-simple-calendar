@@ -12,28 +12,25 @@
     <header>
         <h1>Calendário</h1>
         <div>
-            {% if date.month == 1 %}
-            <button>
+            {% if previous.month == 12 %}
                 <a href={% url "homepage:month_page" month=previous.month year=previous.year %} >
-                    &lt;
+                    <button class="default_button" >&lt;</button>
                 </a>
-            </button>
             {% else %}
-                <button>
-                    <a href={% url "homepage:month_page" month=previous.month year=date_list.0.year %} >
-                        &lt;
-                    </a>
-                </button>
-            {% endif %}
-            <button>
-                <a href={% url "homepage:month_page" month=next.month year=date_list.41.year %}>
-                    &gt;
+                <a href={% url "homepage:month_page" month=previous.month year=date_list.0.year %} >
+                    <button class="default_button" >&lt;</button>
                 </a>
-            </button>
+            {% endif %}
+            <a href={% url "homepage:month_page" month=next.month year=date_list.41.year %}>
+                <button class="default_button" >&gt;</button>
+            </a>
         </div>
     </header>
     <hr>
     <main>
+        {% for week in week_days.values %}
+            <div><span class="week-day">{{ week }}</span></div>
+        {% endfor %}
         {% for date in date_list %}
             {% if date.day == today.day and date.month == today.month and date.year == today.year %}
                 <div class="calendar-tile">
