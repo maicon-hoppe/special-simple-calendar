@@ -3,8 +3,13 @@ header {
     justify-content: space-between;
     padding: 10px;
 
-    button {
-        padding: 5px;
+    a {
+        display: inline-block;
+
+        button {
+            padding: 5px;
+            cursor: pointer;
+        }
     }
 }
 
@@ -13,23 +18,36 @@ main {
     height: fit-content;
 
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 15vh);
+    grid-template-rows: 2em repeat(6, calc(15vh - (2em/6)));
+
+    .week-day {
+        position: relative;
+        top: 0.8em;
+        left: calc(50% - 1em);
+    }
 
     .calendar-tile {
-        border: 1px solid black;
+        border: 1px solid light-dark(black, white);
 
         span {
             display: inline-block;
-            margin: 5px;
+            padding: 8px;
         }
     }
 
     #today {
-        /* margin: -5px; */
+        color: white;
 
-        border: 10px solid blue;
-        border-radius: 100%;
+        background: center center no-repeat local;
+        background-size: cover;
 
-        background-color: blue;
+        @media (prefers-color-scheme: dark) {
+            background-image: url("../svg/dark-circle.svg");
+        }
+
+        @media (prefers-color-scheme: light) {
+            background-image: url("../svg/light-circle.svg");
+        }
+
     }
 }

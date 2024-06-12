@@ -1,13 +1,14 @@
-from datetime import date, timedelta
 from typing import Any, Literal, Self
 
+from django.utils.dates import WEEKDAYS_ABBR
+from django.utils.timezone import datetime, timedelta
 from django.views.generic import TemplateView
 from django.views.generic.dates import MonthMixin, YearMixin
 
 
 def get_month_list(
-    month: int, year: int = date.today().year
-) -> list[date] | Literal[-1]:
+    month: int, year: int = datetime.today().year
+) -> list[datetime] | Literal[-1]:
     """
     Returns a list with dates for the days of the month plus the
     beggining of the first week (Sunday) and the end of the last one (Saturday).
@@ -21,7 +22,7 @@ def get_month_list(
     else:
         return -1
 
-    this_month_first = date.fromisoformat(date_string)
+    this_month_first = datetime.fromisoformat(date_string)
     if this_month_first.weekday() == 6:
         first_monday = this_month_first
     else:
@@ -37,20 +38,21 @@ class HomepageView(MonthMixin, TemplateView):
     def get_context_data(self: Self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
-        context["date_list"] = get_month_list(date.today().month)
+        context["date_list"] = get_month_list(datetime.today().month)
         context["today"] = {
-            "year": date.today().year,
-            "month": date.today().month,
-            "day": date.today().day,
+            "year": datetime.today().year,
+            "month": datetime.today().month,
+            "day": datetime.today().day,
         }
         context["next"] = {
-            "month": date.today().month + 1 if date.today().month < 12 else 1,
-            "year": date.today().year + 1,
+            "month": datetime.today().month + 1 if datetime.today().month < 12 else 1,
+            "year": datetime.today().year + 1,
         }
         context["previous"] = {
-            "month": date.today().month - 1 if date.today().month > 1 else 12,
-            "year": date.today().year - 1,
+            "month": datetime.today().month - 1 if datetime.today().month > 1 else 12,
+            "year": datetime.today().year - 1,
         }
+        context["week_days"] = WEEKDAYS_ABBR
 
         return context
 

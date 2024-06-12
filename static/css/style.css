@@ -1,5 +1,19 @@
 @charset "utf-8";
 
+/*  Color Palette (light-dark)  */
+/* Primary:   #4E45FC - #0C03BA */
+/* Secondary: #92E39B - #1C6D26 */
+/* Accent:    #9F7A90 - #856076 */
+
+:root {
+    color-scheme: light dark;
+    /* color-scheme: only light; */
+
+    --primary-color: light-dark(hsl(243, 97%, 63%), hsl(243, 97%, 37%));
+    --secondary-color: light-dark(hsl(127, 59%, 73%), hsl(127, 59%, 27%));
+    --accent-color: light-dark(hsl(324, 16%, 55%), hsl(324, 16%, 45%));
+}
+
 * {
     padding: 0px;
     margin: 0px;
@@ -13,6 +27,10 @@ body {
     
     font-family: sans-serif;
 
-    color: white;
-    background-color: darkred;
+    .default_button {
+        border: none;
+        
+        color: white;
+        background-color: var(--primary-color);
+    }
 }
