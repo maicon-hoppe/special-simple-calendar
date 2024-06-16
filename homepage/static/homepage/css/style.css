@@ -1,53 +1,49 @@
-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-
-    a {
-        display: inline-block;
-
-        button {
-            padding: 5px;
-            cursor: pointer;
-        }
-    }
-}
-
 main {
     display: grid;
     height: fit-content;
 
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: 2em repeat(6, calc(15vh - (2em/6)));
+    grid-template-rows: 2em repeat(6, calc(15.2dvh - (2em / 6)));
 
     .week-day {
+        font-size: var(--text-size);
         position: relative;
         top: 0.8em;
         left: calc(50% - 1em);
     }
 
     .calendar-tile {
-        border: 1px solid light-dark(black, white);
+        border: 1px solid var(--accent-color);
+
+        color: var(--text-color);
+        background-color: var(--background);
 
         span {
             display: inline-block;
+            height: 32px;
+            width: 32px;
             padding: 8px;
+
+            text-align: center;
+        }
+
+        span#today {
+            color: white;
+
+            background: center center no-repeat local;
+            background-size: cover;
+
+            @media (prefers-color-scheme: dark) { /* Colocar o SVG no HTML */
+                background-image: url("../assets/dark-circle.svg");
+            }
+
+            @media (prefers-color-scheme: light) {
+                background-image: url("../assets/light-circle.svg");
+            }
         }
     }
 
-    #today {
-        color: white;
-
-        background: center center no-repeat local;
-        background-size: cover;
-
-        @media (prefers-color-scheme: dark) {
-            background-image: url("../svg/dark-circle.svg");
-        }
-
-        @media (prefers-color-scheme: light) {
-            background-image: url("../svg/light-circle.svg");
-        }
-
+    .disabled-tile {
+        color: var(--accent-color);
     }
 }

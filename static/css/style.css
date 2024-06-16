@@ -7,11 +7,18 @@
 
 :root {
     color-scheme: light dark;
-    /* color-scheme: only light; */
 
     --primary-color: light-dark(hsl(243, 97%, 63%), hsl(243, 97%, 37%));
     --secondary-color: light-dark(hsl(127, 59%, 73%), hsl(127, 59%, 27%));
     --accent-color: light-dark(hsl(324, 16%, 55%), hsl(324, 16%, 45%));
+
+    --background-10: light-dark(hsl(0 0 90), hsl(0 0 10));
+    --background: light-dark(hsl(0 0 80), hsl(0 0 20));
+
+    --text-color: light-dark(hsl(0 0 15), white);
+
+    --heading-size: 2em;
+    --text-size: 1em;
 }
 
 * {
@@ -23,14 +30,58 @@
 
 body {
     height: 100vh;
-    width: 100vw;
-    
+    width: 100dvw;
+
+    color: var(--text-color);
     font-family: sans-serif;
 
-    .default_button {
-        border: none;
-        
-        color: white;
-        background-color: var(--primary-color);
+    background-color: var(--background-10);
+
+    .light-mode { color-scheme: only light; }
+    .dark-mode { color-scheme: only dark; }
+
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        height: 8dvh;
+        padding: 10px;
+
+        border-bottom: 1px solid var(--secondary-color);
+
+        * { vertical-align: middle; }
+
+        .default-button {
+            height: fit-content;
+            width: fit-content;
+
+            padding: 3px;
+
+            border: none;
+            border-radius: 20px;
+
+            cursor: pointer;
+            text-align: center;
+
+            color: white;
+            background-color: var(--primary-color);
+
+            svg {
+                height: 24px;
+                width: 24px;
+
+                fill: white;
+            }
+        }
+
+        a {
+            display: inline-block;
+
+            svg#logo {
+                height: var(--heading-size);
+                fill: var(--text-color);    
+            }
+        }
     }
 }
