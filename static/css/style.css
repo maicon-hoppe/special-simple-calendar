@@ -64,15 +64,43 @@ body {
             cursor: pointer;
             text-align: center;
 
+            fill: white;
             color: white;
             background-color: var(--primary-color);
+        }
 
-            svg {
-                height: 24px;
-                width: 24px;
+        .secundary-button {
+            padding: 3px;
 
-                fill: white;
+            border: none;
+            border-radius: 6px;
+
+            svg { fill: var(--text-color); }
+
+            background-color: transparent;
+
+            &:active {
+                background-color: var(--primary-color);
             }
+        }
+
+        :where(.default-button, .secundary-button) > svg {
+            height: 24px;
+            width: 24px;
+        }
+
+        #context-menu {
+            padding: 5px;
+
+            border-radius: 6px;
+            background-color: var(--background);
+
+            position: absolute;
+            top: 8dvh;
+            right: 0.5dvw;
+
+            list-style-type: none;
+            z-index: 1;
         }
 
         a {
