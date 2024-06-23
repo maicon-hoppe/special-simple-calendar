@@ -7,6 +7,7 @@
     <script src="{% static 'global/js/htmx.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
     {% block head %}{% endblock head %}
+    <link rel="shortcut icon" href="{% static 'global/images/logo.webp' %}" type="image/x-icon">
     <title>{% block title %}Documento{% endblock title %}</title>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>

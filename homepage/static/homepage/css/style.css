@@ -24,21 +24,20 @@ main {
             width: 32px;
             padding: 8px;
 
+            font-size: var(--text-size);
             text-align: center;
         }
 
         span#today {
-            color: white;
+            padding: unset;
 
-            background: center center no-repeat local;
-            background-size: cover;
+            svg {
+                circle { fill: var(--primary-color); }
 
-            @media (prefers-color-scheme: dark) { /* Colocar o SVG no HTML */
-                background-image: url("../assets/dark-circle.svg");
-            }
-
-            @media (prefers-color-scheme: light) {
-                background-image: url("../assets/light-circle.svg");
+                text {
+                    fill: white;
+                    font-size: 50%;
+                }
             }
         }
     }
