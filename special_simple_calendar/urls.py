@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("homepage.urls")),
     path("html_assets/", include("html_assets.urls")),
+    path("accounts/", include("google_user_auth.urls")),
 ]

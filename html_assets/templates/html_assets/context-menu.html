@@ -1,3 +1,7 @@
 <menu id="context-menu">
-    <li><button class="secundary-button">Entrar com Google</button></li>
+    {% if user.is_authenticated %}
+        <li><a href="{% url "google_user_auth:logout_view" %}"><button class="secundary-button">Logout</button></a></li>
+    {% else %}
+        <li><a href="{{ auth_url }}"><button class="secundary-button">Entrar com Google</button></a></li>
+    {% endif %}
 </menu>

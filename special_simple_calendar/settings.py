@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS: list[str] = []
+ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "google_user_auth.apps.GoogleUserAuthConfig",
     "homepage.apps.HomepageConfig",
     "html_assets.apps.HtmlAssetsConfig",
     "django_htmx",
@@ -58,6 +59,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "special_simple_calendar.urls"
+
+AUTH_USER_MODEL = "google_user_auth.CalendarUser"
+AUTHENTICATION_BACKENDS = ["google_user_auth.mods.auth.CalendarModelBackend"]
 
 TEMPLATES = [
     {

@@ -75,6 +75,8 @@ body {
             border: none;
             border-radius: 6px;
 
+            cursor: pointer;
+
             svg { fill: var(--text-color); }
 
             background-color: transparent;
@@ -87,6 +89,10 @@ body {
         :where(.default-button, .secundary-button) > svg {
             height: 24px;
             width: 24px;
+        }
+
+        img {
+            height: var(--heading-size);
         }
 
         #context-menu {
