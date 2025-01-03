@@ -1,0 +1,5 @@
+#event-dialog[open] {
+    display: flex;
+    padding: 5px;
+    margin: auto;
+}

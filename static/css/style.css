@@ -95,20 +95,6 @@ body {
             height: var(--heading-size);
         }
 
-        #context-menu {
-            padding: 5px;
-
-            border-radius: 6px;
-            background-color: var(--background);
-
-            position: absolute;
-            top: 8dvh;
-            right: 0.5dvw;
-
-            list-style-type: none;
-            z-index: 1;
-        }
-
         a {
             display: inline-block;
 

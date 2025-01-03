@@ -1,12 +1,8 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout as _logout
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
-
-
-def logout(request: HttpRequest) -> None:
-    _logout(request)
 
 
 def google_auth_response(request: HttpRequest) -> HttpResponse:
@@ -17,13 +13,14 @@ def google_auth_response(request: HttpRequest) -> HttpResponse:
     else:
         if user:
             login(request, user)
-            return redirect("homepage:homepage")
+            return redirect("homepage:login_redirect", permanent=True)
         else:
-            return HttpResponse(f"Could not authenticate user: {user}", status=401)
+            return HttpResponse("<h1>Could not authenticate user</h1><hr>", status=401)
 
 
+@login_required
 def logout_view(request: HttpRequest) -> HttpResponse:
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.is_superuser:
         request.user.delete()
 
     logout(request)

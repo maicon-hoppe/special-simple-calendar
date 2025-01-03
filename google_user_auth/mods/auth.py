@@ -1,11 +1,16 @@
-from typing import Annotated, Final, Never, Optional, TypeAlias
+import json
+from typing import Annotated, Final, Optional, TypeAlias
 
 from django.contrib.auth.backends import ModelBackend
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
+from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 
 from google_user_auth.models import CalendarUser
+from special_simple_calendar.settings import BASE_DIR
+
+from .orm.external import CalendarUserData
 
 
 class CalendarModelBackend(ModelBackend):
@@ -13,23 +18,18 @@ class CalendarModelBackend(ModelBackend):
     GoogleApiScopes: TypeAlias = list[Annotated[str, "API endpoint"]]
     __SCOPES: Final[GoogleApiScopes] = [
         "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/calendar.readonly",
         "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
         "https://www.googleapis.com/auth/calendar.calendars.readonly",
         "https://www.googleapis.com/auth/calendar.calendars.readonly",
-        "https://www.googleapis.com/auth/calendar.events.freebusy",
-        "https://www.googleapis.com/auth/calendar.events.owned",
-        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events",
     ]
     __STATE: Optional[str] = None
     __FLOW: Optional[Flow] = None
 
     @classmethod
     def authorize(cls) -> Annotated[str, "Authorization URL"]:
-        from pathlib import Path
-
         flow = Flow.from_client_secrets_file(
-            f"{Path(__file__).parent.parent.parent.resolve()}/static/json/credentials.json",
+            f"{BASE_DIR}/static/json/credentials.json",
             scopes=cls.__SCOPES,
         )
         flow.redirect_uri = "http://localhost:8000/accounts/"
@@ -47,7 +47,7 @@ class CalendarModelBackend(ModelBackend):
         request: HttpRequest,
         username: Optional[str] = None,
         password: Optional[str] = None,
-    ) -> Optional[CalendarUser] | Never:
+    ) -> Optional[CalendarUser]:
         """Returns a user given the credentials as arguments or in request.
         If credentials are not valid raises PermissionDenied.
         if user is inactive returns None.
@@ -78,9 +78,18 @@ class CalendarModelBackend(ModelBackend):
             user_info["full_name"] = result["name"]
             user_info["profile_picture"] = result["picture"]
 
-            new_user = CalendarUser(**user_info)
+            user_data = CalendarUserData(flow.credentials)
+            user_info["local_timezone"] = user_data.get_user_timezone()
 
-            new_user.save()
+            if not CalendarUser.objects.filter(
+                google_id__exact=user_info["google_id"]
+            ).first():
+                new_user = CalendarUser.objects.create(**user_info)
+            else:
+                new_user = CalendarUser.objects.get(
+                    google_id__exact=user_info["google_id"]
+                )
+
             return new_user if self.user_can_authenticate(new_user) else None
         else:
             raise PermissionDenied("Unauthorized")
@@ -93,3 +102,23 @@ class CalendarModelBackend(ModelBackend):
             return None
         else:
             return user
+
+    @classmethod
+    def get_scopes(cls) -> GoogleApiScopes:
+        return cls.__SCOPES.copy()
+
+    @classmethod
+    def build_user_credentials(cls, user: CalendarUser) -> Credentials:
+        credentials_file = f"{BASE_DIR}/static/json/credentials.json"
+        with open(credentials_file, "r") as target:
+            data = json.load(target)
+            auth_token = {
+                "access_token": user.access_token,
+                "refresh_token": user.refresh_token,
+                "client_id": data["web"]["client_id"],
+                "client_secret": data["web"]["client_secret"],
+            }
+
+        creds = Credentials.from_authorized_user_info(auth_token, cls.get_scopes())
+
+        return creds

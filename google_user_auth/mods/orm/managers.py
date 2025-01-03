@@ -1,4 +1,4 @@
-from typing import Annotated, Literal
+from typing import Annotated
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import gettext as _
@@ -15,9 +15,10 @@ class CalendarUserManager(BaseUserManager):
         access_token: str,
         refresh_token: str,
         expiry: Annotated[str, "ISO fromat"],
-        first_name: Literal["user"] | str = "user",
-        full_name: Literal["user"] | str = "user",
-        profile_picture: Literal["png"] | Annotated[str, "URL"] = "png",
+        first_name: str = "user",
+        full_name: str = "user",
+        profile_picture: Annotated[str, "URL"] = "png",
+        local_timezone: str = "UTC",
     ) -> AbstractBaseUser:
         from google_user_auth.models import CalendarUser
 
@@ -28,6 +29,7 @@ class CalendarUserManager(BaseUserManager):
             first_name=first_name,
             full_name=full_name,
             profile_picture=profile_picture,
+            local_timezone=local_timezone,
             expiry=expiry,
         )
 
@@ -41,9 +43,10 @@ class CalendarUserManager(BaseUserManager):
         refresh_token: str,
         password: str,
         expiry: Annotated[str, "ISO format"],
-        first_name: Literal["admin"] | str = "admin",
-        full_name: Literal["superuser"] | str = "superuser",
-        profile_picture: Literal["png"] | Annotated[str, "URL"] = "png",
+        first_name: str = "admin",
+        full_name: str = "superuser",
+        profile_picture: Annotated[str, "URL"] = "png",
+        local_timezone: str = "UTC",
     ) -> AbstractBaseUser:
         from google_user_auth.models import CalendarUser
 
@@ -58,6 +61,7 @@ class CalendarUserManager(BaseUserManager):
                 first_name=first_name,
                 full_name=full_name,
                 profile_picture=profile_picture,
+                local_timezone=local_timezone,
                 expiry=expiry,
                 is_staff=True,
                 is_superuser=True,
@@ -65,9 +69,6 @@ class CalendarUserManager(BaseUserManager):
 
             new_user.set_password(password)
             new_user.save()
-
-            # all_perms = Permission.objects.all()
-            # new_user.user_permissions.add(*all_perms)
 
             return new_user
         else:

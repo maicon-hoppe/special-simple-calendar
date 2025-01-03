@@ -44,6 +44,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m480-320 160-160-160-160-56 56 64 64H320v80h168l-64 64 56 56Zm0 240q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                 </button>
             </a>
+
             <button id="context-menu-button"
                 class="secundary-button"
                 hx-get={% url "html_assets:context_menu" %}
@@ -51,11 +52,17 @@
                 hx-swap="afterend"
                 hx-trigger="click once"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>
+                {{ user.first_name }}
+                <img src="{{ user.profile_picture }}" alt={{ user.full_name }}>
             </button>
         </div>
     </header>
-    <main>
+    <main
+        hx-get={% url "html_assets:event_dialog" %}
+        hx-target="this"
+        hx-swap="beforeend"
+        hx-trigger="click once"
+    >
         <div><span class="week-day">{{ week_days.6 }}</span></div>
         {% for week in week_days.values %}
             {% if not forloop.last %}
@@ -64,23 +71,80 @@
         {% endfor %}
         {% for date in date_list %}
             {% if date.day == today.day and date.month == today.month and date.year == today.year %}
-                <div class="calendar-tile">
+                <div class="calendar-tile logged"
+                    onclick="createCalendarEvent(this)"
+                    data-month={{ date.month }}
+                    data-year={{ date.year }}
+                >
                     <span id="today">
                         <svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                        <g transform="matrix(2.3364 0 0 2.3364 -455.79 -460.61)">
-                            <circle cx="201.93" cy="203.99" r="6.2173"/>
-                            <text x="197.87964" y="206.43811" xml:space="preserve"><tspan x="197.6964" y="206.43811">{{ date.day|stringformat:"02d" }}</tspan></text>
-                        </g>
+                            <g transform="matrix(2.3364 0 0 2.3364 -455.79 -460.61)">
+                                <circle cx="201.93" cy="203.99" r="6.2173"/>
+                                <text x="197.87964" y="206.43811" xml:space="preserve"><tspan x="197.6964" y="206.43811">{{ date.day|stringformat:"02d" }}</tspan></text>
+                            </g>
                         </svg>
                     </span>
+                    {% for event in calendar_events %}
+                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
+                            {% cycle 1 2 3 4 5 as event_index silent %}
+                            {% if event_index <= 4 %}
+                            <div class="event-tile"
+                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
+                            >
+                                {{ event.title }}
+                            </div>
+                            {% else %}
+                                <span class="more-events-indicator">...</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% resetcycle %}
                 </div>
             {% elif date.month == previous.month or date.month == next.month %}
-                <div class="calendar-tile disabled-tile">
+                <div class="calendar-tile disabled-tile logged"
+                    onclick="createCalendarEvent(this)"
+                    data-month={{ date.month }}
+                    data-year={{ date.year }}
+                >
                     <span>{{ date.day|stringformat:"02d" }}</span>
+                    {% for event in calendar_events %}
+                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
+                            {% cycle 1 2 3 4 5 as event_index silent %}
+                            {% if event_index <= 4 %}
+                            <div class="event-tile"
+                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
+                            >
+                                {{ event.title }}
+                            </div>
+                            {% else %}
+                                <span class="more-events-indicator">...</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% resetcycle %}
                 </div>
             {% else %}
-                <div class="calendar-tile">
-                <span>{{ date.day|stringformat:"02d" }}</span>
+                <div class="calendar-tile logged"
+                    onclick="createCalendarEvent(this)"
+                    data-month={{ date.month }}
+                    data-year={{ date.year }}
+                >
+                    <span>{{ date.day|stringformat:"02d" }}</span>
+                    {% for event in calendar_events %}
+                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
+                            {% cycle 1 2 3 4 5 as event_index silent %}
+                            {% if event_index <= 4 %}
+                            <div class="event-tile"
+                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
+                            >
+                                {{ event.title }}
+                            </div>
+                            {% else %}
+                                <span class="more-events-indicator">...</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% resetcycle %}
                 </div>
             {% endif %}
         {% endfor %}
@@ -105,5 +169,23 @@
                 }
             }
         })
+
+        function createCalendarEvent(calendarTile)
+        {
+            console.log(calendarTile.innerText, 
+                        calendarTile.dataset.month,
+                        calendarTile.dataset.year
+                    )
+
+            const eventDialog = document.querySelector("#event-dialog")
+            if (!eventDialog)
+            {
+                htmx.on("htmx:load", (event) => event.target.showModal())
+            }
+            else
+            {
+                eventDialog.showModal()
+            }
+        }
     </script>
 {% endblock body %}

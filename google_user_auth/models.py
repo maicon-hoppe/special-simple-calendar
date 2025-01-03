@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext as _
 
-from .mods.orm import CalendarUserManager
+from .mods.orm.managers import CalendarUserManager
 
 
 class CalendarUser(AbstractBaseUser, PermissionsMixin):
@@ -11,18 +11,21 @@ class CalendarUser(AbstractBaseUser, PermissionsMixin):
     """
 
     google_id = models.CharField(
-        _("ID do usuário"), max_length=100, editable=False, unique=True
+        _("ID do usuário"), max_length=100, editable=False, unique=True, blank=False
     )
 
     first_name = models.CharField(
         _("Nome de usuário"), default="user", blank=False, max_length=50
-    )  # given_name
+    )
 
     full_name = models.CharField(
         _("Nome Completo"), default="user", blank=False, max_length=100
-    )  # name
+    )
 
     profile_picture = models.URLField(_("Imagem de perfil"), default="png", blank=False)
+    local_timezone = models.CharField(
+        _("Fuso Horário"), max_length=100, blank=False, default="UTC"
+    )
 
     access_token = models.CharField(
         _("Token de acesso"),
