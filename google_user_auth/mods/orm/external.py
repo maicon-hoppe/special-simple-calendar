@@ -21,42 +21,32 @@ class CalendarUserData:
 
         return service
 
-    def get_year_events(self, year: int) -> list[dict[str, str | dict]]:
+    def get_month_events(self, year: int, month: int) -> list[dict[str, Any | dict]]:
         """
-        Returns a dictionary with all the events for a given year,
-        in the users timezone, plus the beggining of the first
-        week (Sunday) and the end of the last one (Saturday)
+        Returns a dictionary with all the events for a given month
+        of a year, in the users timezone, plus the beggining of the
+        first week (Sunday) and the offset until it completes 42
+        days (Saturday).
         """
 
         service = self._get_service()
 
         user_tz = ZoneInfo(self.get_user_timezone())
-        first_sunday = (
-            (datetime.fromisocalendar(year, 1, 1) - timedelta(days=1))
-            .astimezone(user_tz)
-            .isoformat()
-        )
-        last_day = datetime(year, 12, 31)
-        if last_day.isoweekday() == 6:
-            last_saturday = last_day.astimezone(user_tz).isoformat()
-        elif last_day.isoweekday() < 6:
-            difference_to_saturday = (last_day - timedelta(days=6)).isoweekday()
-            last_saturday = (
-                (last_day + timedelta(days=difference_to_saturday))
-                .astimezone(user_tz)
-                .isoformat()
-            )
-        elif last_day.isoweekday() == 7:
-            last_saturday = (
-                (last_day + timedelta(days=7)).astimezone(user_tz).isoformat()
-            )
+        user_month = datetime(year, month, 1).astimezone(user_tz)
+
+        if user_month.isoweekday() == 7:
+            first_day = user_month
+        else:
+            first_day = user_month - timedelta(days=user_month.isoweekday())
+
+        last_day = first_day + timedelta(days=42)
 
         calendar_events: dict = (
             service.events()
             .list(
                 calendarId="primary",
-                timeMin=first_sunday,
-                timeMax=last_saturday,
+                timeMin=first_day.isoformat(),
+                timeMax=last_day.isoformat(),
                 singleEvents=True,
                 orderBy="startTime",
             )

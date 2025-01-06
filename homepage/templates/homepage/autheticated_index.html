@@ -3,9 +3,11 @@
 {% load static %}
 
 {% block head %}
+    <script defer src="{% static "homepage/js/authenticated_index.js" %}"></script>
     <link rel="stylesheet" href="{% static "homepage/css/style.css" %}">
     <link rel="stylesheet" href="{% static "html_assets/css/context-menu.css" %}">
     <link rel="stylesheet" href="{% static "html_assets/css/event-dialog.css" %}">
+    <link rel="stylesheet" href="{% static "html_assets/css/event-tiles.css" %}">
 {% endblock head %}
 
 {% block title %}Calendário{% endblock title %}
@@ -75,6 +77,10 @@
                     onclick="createCalendarEvent(this)"
                     data-month={{ date.month }}
                     data-year={{ date.year }}
+                    hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
+                    hx-target="this"
+                    hx-swap="beforeend"
+                    hx-trigger="load"
                 >
                     <span id="today">
                         <svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -84,108 +90,32 @@
                             </g>
                         </svg>
                     </span>
-                    {% for event in calendar_events %}
-                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
-                            {% cycle 1 2 3 4 5 as event_index silent %}
-                            {% if event_index <= 4 %}
-                            <div class="event-tile"
-                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
-                            >
-                                {{ event.title }}
-                            </div>
-                            {% else %}
-                                <span class="more-events-indicator">...</span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    {% resetcycle %}
                 </div>
             {% elif date.month == previous.month or date.month == next.month %}
                 <div class="calendar-tile disabled-tile logged"
                     onclick="createCalendarEvent(this)"
                     data-month={{ date.month }}
                     data-year={{ date.year }}
+                    hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
+                    hx-target="this"
+                    hx-swap="beforeend"
+                    hx-trigger="load"
                 >
                     <span>{{ date.day|stringformat:"02d" }}</span>
-                    {% for event in calendar_events %}
-                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
-                            {% cycle 1 2 3 4 5 as event_index silent %}
-                            {% if event_index <= 4 %}
-                            <div class="event-tile"
-                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
-                            >
-                                {{ event.title }}
-                            </div>
-                            {% else %}
-                                <span class="more-events-indicator">...</span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    {% resetcycle %}
                 </div>
             {% else %}
                 <div class="calendar-tile logged"
                     onclick="createCalendarEvent(this)"
                     data-month={{ date.month }}
                     data-year={{ date.year }}
+                    hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
+                    hx-target="this"
+                    hx-swap="beforeend"
+                    hx-trigger="load"
                 >
                     <span>{{ date.day|stringformat:"02d" }}</span>
-                    {% for event in calendar_events %}
-                        {% if event.start_point.day <= date.day and event.end_point.day >= date.day %}
-                            {% cycle 1 2 3 4 5 as event_index silent %}
-                            {% if event_index <= 4 %}
-                            <div class="event-tile"
-                                style="color: {{ event.event_color.foreground }}; background-color: {{ event.event_color.background }}"
-                            >
-                                {{ event.title }}
-                            </div>
-                            {% else %}
-                                <span class="more-events-indicator">...</span>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    {% resetcycle %}
                 </div>
             {% endif %}
         {% endfor %}
     </main>
-    <script>
-        const contextMenuButton = document.querySelector("#context-menu-button")
-        document.body.addEventListener("click", (event) =>
-        {
-            const contextMenu = document.querySelector("#context-menu")
-            if (contextMenu)
-            {
-                const targetIsContextMenuButton = contextMenuButton === event.target
-                const contextMenuButtonIncludesTarget = Array.from(contextMenuButton.children).includes(event.target)
-
-                if ( targetIsContextMenuButton || contextMenuButtonIncludesTarget )
-                {
-                    contextMenu.hidden = !contextMenu.hidden
-                }
-                else
-                {
-                    contextMenu.hidden = true
-                }
-            }
-        })
-
-        function createCalendarEvent(calendarTile)
-        {
-            console.log(calendarTile.innerText, 
-                        calendarTile.dataset.month,
-                        calendarTile.dataset.year
-                    )
-
-            const eventDialog = document.querySelector("#event-dialog")
-            if (!eventDialog)
-            {
-                htmx.on("htmx:load", (event) => event.target.showModal())
-            }
-            else
-            {
-                eventDialog.showModal()
-            }
-        }
-    </script>
 {% endblock body %}

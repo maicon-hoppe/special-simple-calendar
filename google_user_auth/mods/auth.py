@@ -20,8 +20,12 @@ class CalendarModelBackend(ModelBackend):
         "https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
         "https://www.googleapis.com/auth/calendar.calendars.readonly",
-        "https://www.googleapis.com/auth/calendar.calendars.readonly",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        
+        "https://www.googleapis.com/auth/calendar.readonly",
         "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
     ]
     __STATE: Optional[str] = None
     __FLOW: Optional[Flow] = None

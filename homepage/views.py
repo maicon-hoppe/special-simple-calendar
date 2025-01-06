@@ -45,6 +45,60 @@ def get_month_list(
 class HomepageView(MonthMixin, TemplateView):
     month_format = "%m"
 
+    def get(self, request, *args, **kwargs):
+        creds = CalendarModelBackend.build_user_credentials(request.user)
+        user_data = CalendarUserData(creds)
+
+        CalendarEvent.objects.filter(username__exact=request.user).delete()
+        EventColor.objects.all().delete()
+
+        all_event_colors = user_data.get_event_colors().items()
+        EventColor.objects.bulk_create(
+            [
+                EventColor(
+                    color_id=key,
+                    foreground=value["foreground"],
+                    background=value["background"],
+                )
+                for key, value in all_event_colors
+            ]
+        )
+        default_color = user_data.get_calendar_color()
+        EventColor(0, foreground="#1d1d1d", background=default_color).save()
+
+        all_events = user_data.get_month_events(
+            datetime.today().year, datetime.today().month
+        )
+        CalendarEvent.objects.bulk_create(
+            [
+                CalendarEvent(
+                    title=event.get("summary", None),
+                    description=event.get("description", None),
+                    start_point=datetime.fromisoformat(
+                        event["start"].get("dateTime", event["start"].get("date"))
+                    ).astimezone(UTC),
+                    end_point=(
+                        datetime.fromisoformat(event["end"].get("dateTime")).astimezone(
+                            UTC
+                        )
+                        if event["end"].get("dateTime")
+                        else datetime.fromisoformat(
+                            event["end"].get("date")
+                        ).astimezone(UTC)
+                        - timedelta(minutes=1)
+                    ),
+                    timezone=(
+                        event["start"].get("timeZone", request.user.local_timezone)
+                    ),
+                    event_color=EventColor.objects.get(pk=event.get("colorId", 0)),
+                    username=request.user,
+                )
+                for event in all_events
+            ]
+        )
+
+        return super().get(request, *args, **kwargs)
+
     def get_template_names(self):
         if self.request.user.is_authenticated:
             return ["homepage/autheticated_index.html"]
@@ -89,6 +143,60 @@ class HomepageView(MonthMixin, TemplateView):
 
 
 class MonthPageView(YearMixin, HomepageView):
+
+    def get(self, request, *args, **kwargs):
+        creds = CalendarModelBackend.build_user_credentials(request.user)
+        user_data = CalendarUserData(creds)
+
+        CalendarEvent.objects.filter(username__exact=request.user).delete()
+        EventColor.objects.all().delete()
+
+        all_event_colors = user_data.get_event_colors().items()
+        EventColor.objects.bulk_create(
+            [
+                EventColor(
+                    color_id=key,
+                    foreground=value["foreground"],
+                    background=value["background"],
+                )
+                for key, value in all_event_colors
+            ]
+        )
+        default_color = user_data.get_calendar_color()
+        EventColor(0, foreground="#1d1d1d", background=default_color).save()
+
+        all_events = user_data.get_month_events(
+            datetime.today().year, datetime.today().year
+        )
+        CalendarEvent.objects.bulk_create(
+            [
+                CalendarEvent(
+                    title=event.get("summary", None),
+                    description=event.get("description", None),
+                    start_point=datetime.fromisoformat(
+                        event["start"].get("dateTime", event["start"].get("date"))
+                    ).astimezone(UTC),
+                    end_point=(
+                        datetime.fromisoformat(event["end"].get("dateTime")).astimezone(
+                            UTC
+                        )
+                        if event["end"].get("dateTime")
+                        else datetime.fromisoformat(
+                            event["end"].get("date")
+                        ).astimezone(UTC)
+                        - timedelta(minutes=1)
+                    ),
+                    timezone=(
+                        event["start"].get("timeZone", request.user.local_timezone)
+                    ),
+                    event_color=EventColor.objects.get(pk=event.get("colorId", 0)),
+                    username=request.user,
+                )
+                for event in all_events
+            ]
+        )
+
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -144,7 +252,9 @@ def login_redirect_view(request: HttpRequest) -> HttpResponse:
     default_color = user_data.get_calendar_color()
     EventColor(0, foreground="#1d1d1d", background=default_color).save()
 
-    all_events = user_data.get_year_events(datetime.today().year)
+    all_events = user_data.get_month_events(
+        datetime.today().year, datetime.today().month
+    )
     CalendarEvent.objects.bulk_create(
         [
             CalendarEvent(

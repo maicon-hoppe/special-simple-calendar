@@ -1,0 +1,16 @@
+.calendar-tile:has(.more-events-indicator) span { order: -2; }
+.calendar-tile:not(:has(.more-events-indicator)) span { grid-column: 1 / 3; }
+
+span.more-events-indicator {
+    margin-left: auto;
+    order: -1;
+    font-weight: bold;
+}
+
+.event-tile {
+    padding: 5px;
+    margin: 1px;
+
+    align-content: center;
+    border-radius: 10px;
+}

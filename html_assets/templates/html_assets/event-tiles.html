@@ -1,0 +1,21 @@
+{% for event in calendar_events %}
+    {% cycle 1 2 3 4 5 as event_index silent %}
+    {% if event_index <= 4 %}
+        <div class="event-tile"
+            style="{% spaceless %}
+            {% if event.end_point.hour|add:event.start_point.hour != 23 and event.end_point.minute|add:event.start_point.minute != 59 %}
+                color: var(--text-color);
+                background-color: transparent;
+                border-left: 3px solid {{ event.event_color.background }}
+            {% else %}
+                color: {{ event.event_color.foreground }};
+                background-color: {{ event.event_color.background }}
+            {% endif %}{% endspaceless %}"
+        >
+            {{ event.title|truncatechars:16 }}
+        </div>
+    {% else %}
+        <span class="more-events-indicator">...</span>
+    {% endif %}
+{% endfor %}
+{% resetcycle %}
