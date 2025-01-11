@@ -1,18 +1,21 @@
-{% for event in calendar_events %}
+{% for event in calendarevent_list %}
     {% cycle 1 2 3 4 5 as event_index silent %}
     {% if event_index <= 4 %}
-        <div class="event-tile"
+        <div class="event-tile" onclick="showEvent(this)"
             style="{% spaceless %}
             {% if event.end_point.hour|add:event.start_point.hour != 23 and event.end_point.minute|add:event.start_point.minute != 59 %}
                 color: var(--text-color);
                 background-color: transparent;
                 border-left: 3px solid {{ event.event_color.background }}
             {% else %}
-                color: {{ event.event_color.foreground }};
+                color: var(--text-color);
                 background-color: {{ event.event_color.background }}
             {% endif %}{% endspaceless %}"
+            hx-get="{% url 'html_assets:show_event_dialog' event.pk %}"
+            hx-target="dialog#show-event-dialog"
+            hx-swap="innerHTML"
         >
-            {{ event.title|truncatechars:16 }}
+            {{ event.title|default_if_none:"Sem título"|truncatechars:16 }}
         </div>
     {% else %}
         <span class="more-events-indicator">...</span>

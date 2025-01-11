@@ -12,5 +12,5 @@ span.more-events-indicator {
     margin: 1px;
 
     align-content: center;
-    border-radius: 10px;
+    border-radius: var(--default-bradius);
 }

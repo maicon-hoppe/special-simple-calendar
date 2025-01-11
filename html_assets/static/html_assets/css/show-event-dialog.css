@@ -1,0 +1,43 @@
+#show-event-dialog {
+    height: 200px;
+    width: 300px;
+    min-height: 20dvh;
+    min-width: 20dvw;
+
+    #dialog-control {
+        display: flex;
+        flex-direction: row-reverse;
+
+        button#close-event-display {
+            height: 30px;
+            width: 30px;
+            font-size: var(--text-size);
+        }
+    }
+
+    #title-group {
+        display: flex;
+        margin: 5px 0px 10px;
+
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        .event-color-display {
+            height: 20px;
+            width: 20px;
+
+            border-radius: var(--default-bradius);
+        }
+    }
+
+    #description {
+        margin-bottom: 15px;
+    }
+
+    .time-group {
+        time { display: inline-block; }
+    }
+
+    .time-group > time, #description { text-indent: var(--text-size); }
+}

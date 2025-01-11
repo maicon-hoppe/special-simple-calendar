@@ -9,8 +9,8 @@ class CalendarEventsInline(admin.TabularInline):
 
 
 class EventColorAdmin(admin.ModelAdmin):
-    fields = ["color_id", "foreground", "background"]
-    list_display = ["color_id", "foreground", "background"]
+    fields = ["color_id", "background"]
+    list_display = ["color_id", "background"]
 
     inlines = [CalendarEventsInline]
 

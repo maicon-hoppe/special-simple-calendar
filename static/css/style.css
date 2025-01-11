@@ -1,15 +1,15 @@
 @charset "utf-8";
 
 /*  Color Palette (light-dark)  */
-/* Primary:   #4E45FC - #0C03BA */
-/* Secondary: #92E39B - #1C6D26 */
+/* Primary:   #0C03BA - #4E45FC */
+/* Secondary: #1C6D26 - #92E39B */
 /* Accent:    #9F7A90 - #856076 */
 
 :root {
     color-scheme: light dark;
 
-    --primary-color: light-dark(hsl(243, 97%, 63%), hsl(243, 97%, 37%));
-    --secondary-color: light-dark(hsl(127, 59%, 73%), hsl(127, 59%, 27%));
+    --primary-color: light-dark(hsl(243, 97%, 37%), hsl(243, 97%, 63%));
+    --secondary-color: light-dark(hsl(127, 59%, 27%), hsl(127, 59%, 73%));
     --accent-color: light-dark(hsl(324, 16%, 55%), hsl(324, 16%, 45%));
 
     --background-10: light-dark(hsl(0 0 90), hsl(0 0 10));
@@ -19,6 +19,8 @@
 
     --heading-size: 2em;
     --text-size: 1em;
+
+    --default-bradius: 10px;
 }
 
 * {
@@ -26,6 +28,7 @@
     margin: 0px;
 
     box-sizing: border-box;
+    vertical-align: middle;
 }
 
 body {
@@ -40,6 +43,45 @@ body {
     .light-mode { color-scheme: only light; }
     .dark-mode { color-scheme: only dark; }
 
+    .default-button {
+        height: fit-content;
+        width: fit-content;
+
+        padding: 3px;
+
+        border: none;
+        border-radius: 20px;
+
+        cursor: pointer;
+        text-align: center;
+
+        fill: white;
+        color: white;
+        background-color: var(--primary-color);
+
+        &:active { background-color: var(--accent-color); }
+    }
+
+    .secundary-button {
+        padding: 3px;
+
+        border: none;
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        svg { fill: var(--text-color); }
+
+        background-color: transparent;
+
+        &:active { background-color: var(--primary-color); }
+    }
+
+    :where(.default-button, .secundary-button) > svg {
+        height: 24px;
+        width: 24px;
+    }
+
     header {
         display: flex;
         align-items: center;
@@ -50,45 +92,12 @@ body {
 
         border-bottom: 1px solid var(--secondary-color);
 
-        * { vertical-align: middle; }
-
-        .default-button {
-            height: fit-content;
-            width: fit-content;
-
-            padding: 3px;
-
-            border: none;
-            border-radius: 20px;
-
-            cursor: pointer;
-            text-align: center;
-
-            fill: white;
-            color: white;
-            background-color: var(--primary-color);
-        }
-
-        .secundary-button {
-            padding: 3px;
-
-            border: none;
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            svg { fill: var(--text-color); }
-
-            background-color: transparent;
-
-            &:active {
-                background-color: var(--primary-color);
-            }
-        }
-
-        :where(.default-button, .secundary-button) > svg {
-            height: 24px;
-            width: 24px;
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            & > a:first-of-type { margin-left: 10px; }
+            /* & > a:last-of-type { margin-right: 1px; } */
         }
 
         img {

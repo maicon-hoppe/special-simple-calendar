@@ -1,0 +1,21 @@
+<div id="dialog-control"><button id="close-event-display" class="secundary-button" onclick='showEventDialog.close()'>X</button></div>
+<section id="title-group">
+    <h2>{{ calendarevent.title|default_if_none:"[Sem título]"|truncatechars:16 }}</h2>
+    <div class="event-color-display" style="background-color: {{ calendarevent.event_color.background }};"></div>
+</section>
+<p id="description">{{ calendarevent.description|default_if_none:"" }}</p>
+{% if calendarevent.end_point.hour|add:calendarevent.start_point.hour != 23 and calendarevent.end_point.minute|add:calendarevent.start_point.minute != 59 %}
+    <section class="time-group">
+        <h3>Início:</h3>
+        <time>{{ calendarevent.start_point|date:"g:i A" }}</time>
+    </section>
+    <section class="time-group">
+        <h3>Fim:</h3>
+        <time>{{ calendarevent.end_point|date:"g:i A" }}</time>
+    </section>
+{% else %}
+    <section class="time-group">
+        <h3>Dia:</h3>
+        <time>{{ calendarevent.start_point|date:"d \d\e F \d\e Y" }}</time>
+    </section>
+{% endif %}

@@ -5,6 +5,21 @@ main {
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: 2em repeat(6, calc(15.2dvh - (2em / 6)));
 
+    dialog[open] {
+        display: flex;
+        padding: 10px;
+        margin: auto;
+    
+        flex-direction: column;
+
+        border: 1px solid var(--accent-color);
+        border-radius: var(--default-bradius);
+        background-color: var(--background);
+
+        &:focus-visible, & *:focus-visible { outline: 2px solid var(--accent-color); }
+
+    }
+
     .week-day {
         font-size: var(--text-size);
         position: relative;

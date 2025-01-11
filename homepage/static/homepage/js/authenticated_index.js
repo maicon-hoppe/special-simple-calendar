@@ -7,7 +7,7 @@ document.body.addEventListener("click", (event) =>
         const targetIsContextMenuButton = contextMenuButton === event.target
         const contextMenuButtonIncludesTarget = Array.from(contextMenuButton.children).includes(event.target)
 
-        if ( targetIsContextMenuButton || contextMenuButtonIncludesTarget )
+        if (targetIsContextMenuButton || contextMenuButtonIncludesTarget)
         {
             contextMenu.hidden = !contextMenu.hidden
         }
@@ -18,19 +18,32 @@ document.body.addEventListener("click", (event) =>
     }
 })
 
-function createCalendarEvent(calendarTile)
+const calendarTiles = document.querySelectorAll(".calendar-tile")
+const createEventDialog = document.querySelector("#create-event-dialog")
+for (const tile of calendarTiles)
 {
-    console.log(calendarTile.innerText, 
-                calendarTile.dataset.month,
-                calendarTile.dataset.year)
+    tile.addEventListener("click", event =>
+    {
+        if (!event.target.classList.contains("event-tile"))
+        {
+            console.log(tile.innerText,
+                tile.dataset.month,
+                tile.dataset.year
+            )
 
-    const eventDialog = document.querySelector("#event-dialog")
-    if (!eventDialog)
-    {
-        htmx.on("htmx:load", (event) => event.target.showModal())
-    }
-    else
-    {
-        eventDialog.showModal()
-    }
+            // if createEventDialog
+            createEventDialog.showModal()
+            // else
+            // htmx.onLoad((_) => createEventDialog.showModal())
+        }
+    })
+}
+
+const showEventDialog = document.querySelector("#show-event-dialog")
+function showEvent(eventTile)
+{
+    // if showEventDialog
+    showEventDialog.showModal()
+    // else
+    // htmx.onLoad((_) => showEventDialog.showModal())
 }

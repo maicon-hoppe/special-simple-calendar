@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
+from google.auth.transport.requests import Request
 
 from google_user_auth.models import CalendarUser
 from special_simple_calendar.settings import BASE_DIR
@@ -124,5 +125,8 @@ class CalendarModelBackend(ModelBackend):
             }
 
         creds = Credentials.from_authorized_user_info(auth_token, cls.get_scopes())
+
+        if creds.expired:
+            creds.refresh(Request())
 
         return creds

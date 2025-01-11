@@ -13,7 +13,7 @@ def google_auth_response(request: HttpRequest) -> HttpResponse:
     else:
         if user:
             login(request, user)
-            return redirect("homepage:login_redirect", permanent=True)
+            return redirect("homepage:homepage", permanent=True)
         else:
             return HttpResponse("<h1>Could not authenticate user</h1><hr>", status=401)
 

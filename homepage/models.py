@@ -7,7 +7,6 @@ from google_user_auth.models import CalendarUser
 class EventColor(models.Model):
     color_id = models.IntegerField(_("ID da cor"), primary_key=True)
 
-    foreground = models.CharField(_("Cor do texto"), max_length=9, blank=False)
     background = models.CharField(_("Cor de fundo"), max_length=9, blank=False)
 
     def __str__(self):
