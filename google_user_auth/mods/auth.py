@@ -1,12 +1,12 @@
 import json
-from typing import Annotated, Final, Optional, TypeAlias, ClassVar
+from typing import Annotated, ClassVar, Final, Optional, TypeAlias
 
 from django.contrib.auth.backends import ModelBackend
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
+from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
-from google.auth.transport.requests import Request
 
 from google_user_auth.models import CalendarUser
 from special_simple_calendar.settings import BASE_DIR
@@ -21,12 +21,12 @@ class CalendarModelBackend(ModelBackend):
         "https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
         "https://www.googleapis.com/auth/calendar.calendars.readonly",
-        "https://www.googleapis.com/auth/calendar.events.owned",
-        
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
         "https://www.googleapis.com/auth/calendar.readonly",
         "https://www.googleapis.com/auth/calendar.events",
         "https://www.googleapis.com/auth/calendar.events.freebusy",
         "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.owned",
     ]
     __STATE: ClassVar[Optional[str]] = None
     __FLOW: ClassVar[Optional[Flow]] = None
