@@ -7,17 +7,31 @@ main {
 
     dialog[open] {
         display: flex;
-        padding: 10px;
+        min-height: 15dvh;
+        min-width: 20dvw;
+
+        padding: 5px 10px 10px;
         margin: auto;
     
         flex-direction: column;
+        gap: 5px;
 
         border: 1px solid var(--accent-color);
         border-radius: var(--default-bradius);
-        background-color: var(--background);
+        background-color: var(--background-10);
 
-        &:focus-visible, & *:focus-visible { outline: 2px solid var(--accent-color); }
+        &:focus-visible, & *:focus-visible { outline: 1px solid var(--accent-color); }
 
+        #dialog-control {
+            display: flex;
+            flex-direction: row-reverse;
+    
+            button#close-event-display {
+                height: 30px;
+                width: 30px;
+                font-size: var(--text-size);
+            }
+        }
     }
 
     .week-day {
@@ -43,8 +57,6 @@ main {
         &.disabled-tile {
             color: var(--accent-color);
         }
-
-        &.logged { cursor: pointer; }
 
         span {
             display: inline-block;

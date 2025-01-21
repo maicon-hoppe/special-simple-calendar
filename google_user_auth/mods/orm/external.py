@@ -11,15 +11,16 @@ class CalendarUserData:
     Represents the user's data from Google Calendar API
     """
 
+    __SERVICE = None
+
     def __init__(self, user_credentials: Credentials) -> None:
         self._user_credentials = user_credentials
 
     def _get_service(self):
-        service = None
-        if not service:
-            service = build("calendar", "v3", credentials=self._user_credentials)
+        if not self.__SERVICE:
+            self.__SERVICE = build("calendar", "v3", credentials=self._user_credentials)
 
-        return service
+        return self.__SERVICE
 
     def get_month_events(self, year: int, month: int) -> list[dict[str, Any | dict]]:
         """

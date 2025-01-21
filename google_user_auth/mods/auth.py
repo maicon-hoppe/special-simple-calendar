@@ -1,5 +1,5 @@
 import json
-from typing import Annotated, Final, Optional, TypeAlias
+from typing import Annotated, Final, Optional, TypeAlias, ClassVar
 
 from django.contrib.auth.backends import ModelBackend
 from django.http import HttpRequest
@@ -28,8 +28,8 @@ class CalendarModelBackend(ModelBackend):
         "https://www.googleapis.com/auth/calendar.events.freebusy",
         "https://www.googleapis.com/auth/calendar.events.public.readonly",
     ]
-    __STATE: Optional[str] = None
-    __FLOW: Optional[Flow] = None
+    __STATE: ClassVar[Optional[str]] = None
+    __FLOW: ClassVar[Optional[Flow]] = None
 
     @classmethod
     def authorize(cls) -> Annotated[str, "Authorization URL"]:

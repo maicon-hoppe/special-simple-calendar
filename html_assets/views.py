@@ -1,17 +1,9 @@
 from typing import Any
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import (
-    HttpRequest,
-    HttpResponse,
-    HttpResponseNotAllowed,
-    HttpResponseNotFound,
-)
-from django.shortcuts import render
-from django.views.decorators.http import require_GET
-from django.views.generic import ListView, TemplateView, DetailView
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseNotFound
+from django.views.generic import DetailView, ListView, TemplateView
 
 from google_user_auth.mods.auth import CalendarModelBackend
 from homepage.models import CalendarEvent
@@ -36,6 +28,7 @@ class ContextMenuView(TemplateView):
 
 class ShowEventDialogView(DetailView):
     """View for displaying a calendar event"""
+
     model = CalendarEvent
     template_name = "html_assets/show-event-dialog.html"
 
@@ -44,16 +37,6 @@ class ShowEventDialogView(DetailView):
             return HttpResponseNotAllowed(request.method)
 
         return super().dispatch(request, *args, **kwargs)
-
-
-@require_GET
-@login_required
-def create_event_dialog(request: HttpRequest) -> HttpResponse:
-    """View for the calendar event creation dialog"""
-    if request.htmx:
-        return render(request, "html_assets/create-event-dialog.html")
-    else:
-        return HttpResponseNotFound(404)
 
 
 class EventTilesView(LoginRequiredMixin, ListView):
@@ -84,3 +67,7 @@ class EventTilesView(LoginRequiredMixin, ListView):
             return super().get(request, *args, **kwargs)
         else:
             return HttpResponseNotFound(404)
+
+
+class EventListView(EventTilesView):
+    template_name = "html_assets/event-list.html"

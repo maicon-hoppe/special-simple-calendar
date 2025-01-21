@@ -19,9 +19,9 @@
         </a>
         <div>
             {% if month and year %}
-                <span>{{ month }} / {{ year }}</span>
+                <span>{{ monthname }} de {{ year }}</span>
             {% else %}
-                <span>{{ today.month }} / {{ today.year }}</span>
+                <span>{{ monthname }} de {{ today.year }}</span>
             {% endif %}
 
             {% if previous.month == 12 %}

@@ -82,6 +82,25 @@ body {
         width: 24px;
     }
 
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: var(--default-bradius);
+        background-color: var(--background);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: var(--default-bradius);
+        background-color: var(--secondary-color);
+
+    }
+
+    @supports ( scrollbar-color: var(--secondary-color) var(--background) ) {
+        & { scrollbar-color: var(--secondary-color) var(--background); }
+    }
+
     header {
         display: flex;
         align-items: center;

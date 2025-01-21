@@ -1,5 +1,10 @@
-{% for event in calendarevent_list|slice:":5" %}
-    {% if forloop.counter <= 4 %}
+<div id="dialog-control">
+    <button id="close-event-display" class="secundary-button" onclick='eventListDialog.close()'>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFF"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+    </button>
+</div>
+<div id="event-group">
+    {% for event in calendarevent_list %}
         <div class="event-tile" onclick="showEvent()"
             style="{% spaceless %}
             {% if event.end_point.hour|add:event.start_point.hour != 23 and event.end_point.minute|add:event.start_point.minute != 59 %}
@@ -14,15 +19,8 @@
             hx-target="dialog#show-event-dialog"
             hx-swap="innerHTML"
         >
-            {{ event.title|default_if_none:"Sem título"|truncatechars:16 }}
+            <span>{{ event.title|default_if_none:"Sem título"|truncatechars:25 }}</span>
+            <time>{{ event.start_point|date:"d/m/Y" }}</time>
         </div>
-    {% else %}
-        {% with event_day=request.path|slice:"33:35" event_month=request.path|slice:"30:32" event_year=request.path|slice:"25:29" event_year=request.path|slice:"25:29" %}
-            <span class="more-events-indicator" onclick="showEventList()"
-                hx-get="{% url 'html_assets:event_list_dialog' year=event_year month=event_month day=event_day %}"
-                hx-target="dialog#event-list-dialog"
-                hx-swap="innerHTML"
-            >...</span>
-        {% endwith %}
-    {% endif %}
-{% endfor %}
+    {% endfor %}
+</div>

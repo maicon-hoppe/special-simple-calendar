@@ -4,6 +4,7 @@
 span.more-events-indicator {
     margin-left: auto;
     order: -1;
+    cursor: pointer;
     font-weight: bold;
 }
 
@@ -11,6 +12,7 @@ span.more-events-indicator {
     padding: 5px;
     margin: 1px;
 
+    cursor: pointer;
     align-content: center;
     border-radius: var(--default-bradius);
 }

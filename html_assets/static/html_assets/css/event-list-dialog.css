@@ -1,0 +1,14 @@
+#event-list-dialog  {
+    height: 222px;
+    
+    #event-group {
+        display: grid;
+        gap: 5px;
+        overflow-y: scroll;
+    }
+
+    .event-tile {
+        display: flex;
+        justify-content: space-between;
+    }
+}

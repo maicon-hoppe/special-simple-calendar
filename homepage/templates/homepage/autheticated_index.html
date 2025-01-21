@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static "html_assets/css/context-menu.css" %}">
     <link rel="stylesheet" href="{% static "html_assets/css/show-event-dialog.css" %}">
     <link rel="stylesheet" href="{% static "html_assets/css/event-tiles.css" %}">
+    <link rel="stylesheet" href="{% static "html_assets/css/event-list-dialog.css" %}">
 {% endblock head %}
 
 {% block title %}Calendário{% endblock title %}
@@ -67,14 +68,7 @@
         {% endfor %}
         {% for date in date_list %}
             {% if date.day == today.day and date.month == today.month and date.year == today.year %}
-                <div class="calendar-tile logged"
-                    data-month={{ date.month }}
-                    data-year={{ date.year }}
-                    hx-get={% url "html_assets:create_event_dialog" %}
-                    hx-target="dialog#create-event-dialog"
-                    hx-swap="innerHTML"
-                    hx-trigger="click"
-                >
+                <div class="calendar-tile">
                     <span id="today"
                         hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
                         hx-target="this"
@@ -90,14 +84,7 @@
                     </span>
                 </div>
             {% elif date.month == previous.month or date.month == next.month %}
-                <div class="calendar-tile disabled-tile logged"
-                    data-month={{ date.month }}
-                    data-year={{ date.year }}
-                    hx-get={% url "html_assets:create_event_dialog" %}
-                    hx-target="dialog#create-event-dialog"
-                    hx-swap="innerHTML"
-                    hx-trigger="click"
-                >
+                <div class="calendar-tile disabled-tile">
                     <span
                         hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
                         hx-target="this"
@@ -106,16 +93,9 @@
                     >{{ date.day|stringformat:"02d" }}</span>
                 </div>
             {% else %}
-                <div class="calendar-tile logged"
-                    data-month={{ date.month }}
-                    data-year={{ date.year }}
-                    hx-get={% url "html_assets:create_event_dialog" %}
-                    hx-target="dialog#create-event-dialog"
-                    hx-swap="innerHTML"
-                    hx-trigger="click"
-                >
+                <div class="calendar-tile">
                     <span
-                        hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month day=date.day %}"
+                        hx-get="{% url 'html_assets:event_tiles' year=date.year month=date.month|stringformat:"02d" day=date.day|stringformat:"02d" %}"
                         hx-target="this"
                         hx-swap="afterend"
                         hx-trigger="load"
@@ -124,6 +104,6 @@
             {% endif %}
         {% endfor %}
         <dialog id="show-event-dialog"></dialog>
-        <dialog id="create-event-dialog"></dialog>
+        <dialog id="event-list-dialog"></dialog>
     </main>
 {% endblock body %}

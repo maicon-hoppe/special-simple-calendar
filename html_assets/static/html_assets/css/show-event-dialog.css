@@ -1,23 +1,10 @@
 #show-event-dialog {
-    height: 200px;
+    height: fit-content;
     width: 300px;
-    min-height: 20dvh;
-    min-width: 20dvw;
-
-    #dialog-control {
-        display: flex;
-        flex-direction: row-reverse;
-
-        button#close-event-display {
-            height: 30px;
-            width: 30px;
-            font-size: var(--text-size);
-        }
-    }
 
     #title-group {
         display: flex;
-        margin: 5px 0px 10px;
+        margin: 5px 0px;
 
         flex-direction: row;
         align-items: center;
@@ -31,13 +18,16 @@
         }
     }
 
-    #description {
-        margin-bottom: 15px;
-    }
+    #description { margin-bottom: 15px; }
 
     .time-group {
-        time { display: inline-block; }
+        margin-bottom: 5px;
+
+        time {
+            display: inline-block;
+            &:last-of-type:not(:only-of-type) { margin-left: 2em; }
+        }
     }
 
-    .time-group > time, #description { text-indent: var(--text-size); }
+    .time-group > time:first-of-type, #description { text-indent: var(--text-size); }
 }
