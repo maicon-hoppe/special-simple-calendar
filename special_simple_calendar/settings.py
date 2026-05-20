@@ -27,9 +27,9 @@ load_dotenv()
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "bar.localhost"]
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -55,10 +56,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "special_simple_calendar.urls"
+
+CACHE_MIDDLEWARE_SECONDS = 3600
 
 AUTH_USER_MODEL = "google_user_auth.CalendarUser"
 AUTHENTICATION_BACKENDS = ["google_user_auth.mods.auth.CalendarModelBackend"]
@@ -127,6 +132,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+STATIC_ROOT = "/root/collected/"
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [("global", BASE_DIR / "static")]
